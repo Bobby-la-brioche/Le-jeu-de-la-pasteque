@@ -5,7 +5,8 @@ from pygame.locals import *
 # /!\ Toute fonction appelée doit être déclarée avant ses appels
 # Généralement on met les fonctions en haut du fichier avant le code principal
 
-# /i\ Note : dans une fonction, l'écriture (param: type) -> type de retour
+# /i\ Note : dans une fonction, l'écriture def nomFonction(param: type) -> type de retour
+# par exemple : def f(x: int) -> int dit "fonction f qui prend un paramètre x de type entier et qui renvoie un entier"
 # est facultative, mais permet de mieux comprendre le code
 # et aussi, si on utilise un IDE comme VSC, d'avoir les propositions
 # lorsqu'on écrit les variables car il sait son type donc ses fonctions possibles
@@ -29,7 +30,7 @@ def fitImageScale(image: pygame.Surface, windowSize: tuple[int, int], ratio: flo
     # pour des raisons de qualité d'images, on en refait une nouvelle au lieu de redimensionnée
     # celle d'origine qui a potentiellement déjà subit un redimensionnement et qui a donc perdu
     # de la qualité
-    # Penser à initialiser la surface avec la transparence si l'image en possède
+    # Penser à initialiser la surface avec la transparence (alpha) si l'image en possède
     img = pygame.Surface((w, h), flags=SRCALPHA)
     img.blit(image, (0, 0)) # copie de l'image d'origine dans la nouvelle
     img = pygame.transform.scale(img, (newW, newH)) # redimensionnement de l'image
@@ -89,7 +90,7 @@ curseur_nuage = fitImageScale(curseur_nuage_originale, WINDOW_SIZE, curseur_nuag
 # Sinon c'est la hauteur
 bgRatio = getImageRatio(background_original)
 background = fitImageScale(background_original, WINDOW_SIZE, min(1, bgRatio))
-
+background_pos = (0, 0)
 
 mouse = pygame.mouse.get_pos()
 
@@ -133,18 +134,20 @@ while True:
             # Mise à jour de la taille des curseurs
             curseur_carotte = fitImageScale(curseur_carotte_originale, WINDOW_SIZE, curseur_carotte_ratio)
             curseur_nuage = fitImageScale(curseur_nuage_originale, WINDOW_SIZE, curseur_nuage_ratio)
+            # mise à jour de la position du background
+            centerX = WINDOW_SIZE[0]/2 - background.get_size()[0]/2
+            bottomY = WINDOW_SIZE[1] - background.get_size()[1]
+            background_pos = (centerX, bottomY)
             
 
     ### 2 - Mise à jour des données ###
- 
-    # Affichage 
-    ecran.fill(NOIR) # /?\ Pourquoi ne pas mettre le fond de la même couleur que la couleur unie de background ?
-    ecran.blit(background, (0, 0)) # /?\ Idée : mettre le fond à la position en bas de la fenêtre, au centre au lieu d'en haut à gauche
-     
     mouse = pygame.mouse.get_pos()
 
-
     ### 3 - Affichage des éléments à l'écran ###
+ 
+    # Affichage
+    ecran.fill(NOIR) # /?\ Pourquoi ne pas mettre le fond de la même couleur que la couleur unie de background ?
+    ecran.blit(background, background_pos) # /?\ Idée : mettre le fond à la position en bas de la fenêtre, au centre au lieu d'en haut à gauche
 
     # Si curseur sur la zone de dépôt
     if mouse[0] >= (7/24 * WINDOW_SIZE[0]) and mouse[0] <= (149/200 * WINDOW_SIZE[0]):
