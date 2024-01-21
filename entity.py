@@ -4,16 +4,16 @@ from image import fitImageScale
 
 class Entity:
     def __init__(self, window_size: tuple[int, int], image: str, ratio_taille: float, pos: tuple[int,int]=(0,0), background_size=False):
-        self.image= load(image).convert_alpha()
-        self.image_og= load(image).convert_alpha()
-        self.pos= pos
-        self.ratio= ratio_taille
+        self.img = load(image).convert_alpha()
+        self.image_og = load(image).convert_alpha()
+        self.pos = pos
+        self.ratio = ratio_taille
         self.background_size = background_size
 
         self.fit_image(window_size)
 
     def fit_image(self, window_size: tuple[int, int]):
-        ratio= self.ratio
+        ratio = self.ratio
 
         if self.background_size=="cover":
             #comparaison des ratios entre fenêtre 
@@ -33,4 +33,4 @@ class Entity:
         elif self.background_size == "contain":
             pass #todo
 
-        self.image= fitImageScale(self.image_og, window_size, ratio)
+        self.img = fitImageScale(self.image_og, window_size, ratio)

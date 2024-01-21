@@ -1,6 +1,7 @@
 from entity import Entity
 from typing import List
 
+# Todo : add layers
 class Scene:
     def __init__(self):
         self.entities: List[Entity] = []
