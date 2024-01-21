@@ -1,6 +1,17 @@
 #Les trucs pour que ça fonctionne
-import pygame, sys, random
+import pygame, sys
 from pygame.locals import *
+from entity import Entity
+from scene import Scene
+from constants import *
+
+# /!\ Toute fonction appelée doit être déclarée avant ses appels
+# Généralement on met les fonctions en haut du fichier avant le code principal
+
+# /i\ Note : dans une fonction, l'écriture (param: type) -> type de retour
+# est facultative, mais permet de mieux comprendre le code
+# et aussi, si on utilise un IDE comme VSC, d'avoir les propositions
+# lorsqu'on écrit les variables car il sait son type donc ses fonctions possibles
 
 
 APP_TITLE = "Jeu de la pastèque"
@@ -10,7 +21,12 @@ WINDOW_SIZE = (1236, 651)
 WINDOW_BACKGROUND = "res/fond_boite_2.png"
 SOURIS= "res/carotte2.png"
 NUAGE= "res/nuage.png"
+VOLUME_ON= "res/volume-on.png"
+VOLUME_OFF= "res/volume-off.png"
+FULLSCREEN_ON= "res/full-screen-on.png"
+FULLSCREEN_OFF= "res/full-screen-off.png"
 
+# Initialisation de pygame
 pygame.init()
 pygame.display.set_caption(APP_TITLE)
 
@@ -19,94 +35,132 @@ logo = pygame.image.load(APP_LOGO)
 pygame.display.set_icon(logo)
 pygame.mouse.set_visible(False)
 
-
-
-
-#temps
-clock = pygame.time.Clock()
-
 # création de la fenêtre
 ecran = pygame.display.set_mode(WINDOW_SIZE, RESIZABLE)
+
+# temps
+clock = pygame.time.Clock()
+
+# % par rapport à la largeur de la fenêtre
+
+curseur_carotte_ratio = 0.03
+curseur_nuage_ratio = 0.05
+Bouton_volume_on_ratio = 0.03
+Bouton_volume_off_ratio = 0.03
+Bouton_full_on_ratio= 0.03
+Bouton_full_off_ratio= 0.03
+
+
 # fond de la fenêtre
-background = pygame.image.load(WINDOW_BACKGROUND).convert()
-background2 = background
+background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 0.05, (0, 0), "contain")
+
+# Boutons
+Bouton_volume_on = Entity(WINDOW_SIZE, VOLUME_ON, Bouton_volume_on_ratio)
+Bouton_volume_off = Entity(WINDOW_SIZE, VOLUME_OFF, Bouton_volume_off_ratio)
+Bouton_full_on = Entity(WINDOW_SIZE, FULLSCREEN_ON, Bouton_full_on_ratio)
+Bouton_full_off = Entity(WINDOW_SIZE, FULLSCREEN_OFF, Bouton_full_off_ratio)
 
 
-#Souris
+# Souris
+curseur_carotte     = Entity(WINDOW_SIZE, SOURIS, curseur_carotte_ratio)
+curseur_nuage       = Entity(WINDOW_SIZE, NUAGE, curseur_nuage_ratio)
 
-curseur_carotte     = pygame.image.load(SOURIS).convert_alpha()
-curseur_nuage       = pygame.image.load(NUAGE).convert_alpha()
-mouse               = pygame.mouse.get_pos()
-curseur_carotte2    = curseur_carotte
-curseur_nuage2      = curseur_nuage
-
-taille_curseur_carotte=curseur_carotte.get_size()
-taille_curseur_nuage=curseur_nuage.get_size()
+mouse = pygame.mouse.get_pos()
 
 
-#Couleurs
-
-YELLOW  = (255, 255, 0)
-GREEN   = (0, 255, 0)
-BLANC   = (255,255,255)
-ROUGE   = (255, 0, 0)
-NOIR    = (0, 0, 0)
-GRIS    = (155,155,155)
-ROSE    = (180,50, 67)
-
-fruits = []
 
 
-#music
+
+scene = Scene()
+
+scene.add(background, curseur_carotte, curseur_nuage, Bouton_volume_on, Bouton_volume_off, Bouton_full_on, Bouton_full_off)
+
+
+
+# Musique
 file = 'res/music_pasteque.mp3'
 pygame.mixer.init()
 pygame.mixer.music.load(file)
 pygame.mixer.music.play(-1)
 
-
-#fonctions
-
-def ratio(image):
-    a=image.get_size()
-    return(a[0]/a[1])
-
-def taille(image):
-    a=image.get_size()
-    return(a[0],a[1])
+t_volume=True
+t_full= False
 
 while True:
-    # actions utilisateurs (clavier, souris)
-    # Les évènements regardés 
+    ### 1 - Gestion des évènements ###
     
+    # Actions utilisateurs (clavier, souris)
     for event in pygame.event.get():
+
+        # appuie sur la croix de la titlebar
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
         
+        # Redimensionnement fenêtre
         elif event.type == pygame.VIDEORESIZE:
-            WINDOW_SIZE=pygame.display.get_surface().get_size()
-            background2 = pygame.transform.scale(background,WINDOW_SIZE)
-            curseur_carotte2 = pygame.transform.scale(curseur_carotte,(taille(curseur_carotte)[0]*WINDOW_SIZE[0]/1000*ratio(curseur_carotte),taille(curseur_carotte)[1]*WINDOW_SIZE[1]/1000))
-            
+            # Mise à jour de la constante de la taille de la fenêtre
+            WINDOW_SIZE = pygame.display.get_surface().get_size()
 
-        # mise à jour des données 
-    # pas encore fait 
+            scene.fitActors(WINDOW_SIZE)
+
+        
+        elif  event.type == MOUSEBUTTONUP and event.button==1:
+            if Bouton_volume_on.img.get_rect().collidepoint(pygame.mouse.get_pos()):
+                t_volume=not t_volume
+                pygame.mixer.music.set_volume(1 if t_volume else 0)
+
+        elif  event.type == MOUSEBUTTONUP and event.button==1:
+            if Bouton_full_on.img.get_rect().collidepoint(pygame.mouse.get_pos()):
+                t_full=not t_full
+                pygame.display.toggle_fullscreen(1 if t_full else 0)
+
+
+    ### 2 - Mise à jour des données ###
+    scene.update()
+
+
+    curseur_carotte.pos = mouse
+    curseur_nuage.pos = mouse
+
  
-    # affichage 
-    ecran.fill(NOIR) 
-    ecran.blit(background2, (0, 0)) 
-     
+    # Affichage 
+    ecran.fill(NOIR) # /?\ Pourquoi ne pas mettre le fond de la même couleur que la couleur unie de background ?
+    ecran.blit(background.img, (0, 0)) # /?\ Idée : mettre le fond à la position en bas de la fenêtre, au centre au lieu d'en haut à gauche
+    
+    
+    if not t_full:
+        ecran.blit(Bouton_full_off.img, (50,10))
+    else:
+        ecran.blit(Bouton_full_on.img, (50,10))
+
+    if not t_volume:    
+        ecran.blit(Bouton_volume_off.img, (10,10))
+    else:
+        ecran.blit(Bouton_volume_on.img, (10,10))
+
     mouse = pygame.mouse.get_pos()
 
 
+    ### 3 - Affichage des éléments à l'écran ###
 
-    if mouse[0]>=(7/24 *WINDOW_SIZE[0]) and mouse[0]<=(149/200 *WINDOW_SIZE[0]):
-        pos=(mouse[0],(101/550)*WINDOW_SIZE[1])
-        pygame.draw.line(ecran, ROSE, start_pos=pos, end_pos=(mouse[0],WINDOW_SIZE[1]), width=5)
-        ecran.blit(curseur_nuage2,pos)
+    # Si curseur sur la zone de dépôt
+    if mouse[0] >= (7/24 * WINDOW_SIZE[0]) and mouse[0] <= (149/200 * WINDOW_SIZE[0]):
+        # affichage ligne de dépôt
+        pos=(mouse[0], (101/550) * WINDOW_SIZE[1])
+        pygame.draw.line(ecran, ROSE, start_pos=pos, end_pos=(mouse[0], WINDOW_SIZE[1]), width=5)
+
+        # affichage curseur nuage (centré)
+        pos = (pos[0] - curseur_nuage.img.get_size()[0]/2, pos[1] - curseur_nuage.img.get_size()[1]/2)
+        ecran.blit(curseur_nuage.img, pos)
+    
+    # si curseur en dehors de la zone de dépôt
     else:
-        ecran.blit(curseur_carotte2, mouse)
+        # affichage curseur carotte (top-left)
+        ecran.blit(curseur_carotte.img, mouse)
 
+    scene.draw(ecran)
 
+    ### Mise à jour pygame
     clock.tick(120)
     pygame.display.update()

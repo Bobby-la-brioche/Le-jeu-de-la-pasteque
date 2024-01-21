@@ -1,11 +1,24 @@
-carotte=(75,97)
-ecran=(1920,1080)
+import pygame, random
+
+class Fruit :
+    def __init__(self, rayon: int, nature:str):
+        self.rayon= rayon
+        self.nature= nature
+        #self.image= pygame.image.load(nature+".png").convert_alpha()
+
+class Tomate(Fruit):
+    def __init__(self, rayon: int):
+        super().__init__(rayon, "tomate")     
+
+class Melon(Fruit):
+    def __init__(self, rayon: int):
+        super().__init__(rayon, "Melon")
+       
+class Poire(Fruit):
+    def __init__(self, rayon: int):
+        super().__init__(rayon, "Poire")
 
 
-ratioc=carotte[0]/carotte[1]
-ratioe=ecran[0]/ecran[1]
 
-w_carotte=0.05*ecran[0]
-h_carotte=w_carotte*ratioc
-
-print(ratioc, ratioe, w_carotte, h_carotte)
+Ma_tomate= Tomate(10)
+pygame.display(Ma_tomate.image)
