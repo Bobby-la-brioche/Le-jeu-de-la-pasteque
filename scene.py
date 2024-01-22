@@ -1,14 +1,15 @@
 from entity import Entity
 from typing import List
+from pygame import Surface
 
 # Todo : add layers
 class Scene:
     def __init__(self):
         self.entities: List[Entity] = []
 
-    def draw(self):
+    def draw(self, ecran: Surface):
         for entity in self.entities:
-            entity.draw()
+            entity.draw(ecran)
 
     def update(self):
         for entity in self.entities:
