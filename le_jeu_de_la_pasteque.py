@@ -67,7 +67,7 @@ Bouton_full_off_ratio= 0.03
 
 
 # fond de la fenêtre
-background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 0.05, (0, 0), "contain")
+background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain")
 
 # Boutons
 Bouton_volume_on = Entity(WINDOW_SIZE, VOLUME_ON, Bouton_volume_on_ratio)
@@ -81,18 +81,6 @@ curseur_carotte     = Entity(WINDOW_SIZE, SOURIS, curseur_carotte_ratio)
 curseur_nuage       = Entity(WINDOW_SIZE, NUAGE, curseur_nuage_ratio)
 
 mouse = pygame.mouse.get_pos()
-
-# % par rapport à la largeur de la fenêtre
-curseur_carotte_ratio = 0.03
-curseur_nuage_ratio = 0.05
-Bouton_volume_on_ratio = 0.03
-Bouton_volume_off_ratio = 0.03
-Bouton_full_on_ratio= 0.03
-Bouton_full_off_ratio= 0.2
-
-
-
-
 scene = Scene()
 
 scene.add_entity(background, curseur_carotte, curseur_nuage, Bouton_volume_on, Bouton_volume_off, Bouton_full_on, Bouton_full_off)
@@ -123,8 +111,7 @@ while True:
         elif event.type == pygame.VIDEORESIZE:
             # Mise à jour de la constante de la taille de la fenêtre
             WINDOW_SIZE = pygame.display.get_surface().get_size()
-
-            scene.fitActors(WINDOW_SIZE)
+            scene.fit_image(WINDOW_SIZE)
 
         
         elif  event.type == MOUSEBUTTONUP and event.button==1:
@@ -177,11 +164,7 @@ while True:
     else:
         ecran.blit(Bouton_volume_on.img, (10,10))
 
-    
-    
-
     mouse = pygame.mouse.get_pos()
-
 
     ### 3 - Affichage des éléments à l'écran ###
 

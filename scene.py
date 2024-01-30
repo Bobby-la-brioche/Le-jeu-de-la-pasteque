@@ -26,3 +26,7 @@ class Scene:
 
         for arg in args:
             self.entities.remove(arg)
+
+    def fit_image(self, window_size: tuple[int, int]):
+        for entity in self.entities:
+            entity.fit_image(window_size)
