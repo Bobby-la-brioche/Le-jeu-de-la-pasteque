@@ -33,7 +33,7 @@ APP_TITLE = "Jeu de la pastèque"
 APP_LOGO = "res/logo.png"
 
 WINDOW_SIZE = (1236, 651)
-WINDOW_BACKGROUND = "res/fond_boite_2.png"
+WINDOW_BACKGROUND = "res/boite.png"
 SOURIS= "res/carotte2.png"
 NUAGE= "res/nuage.png"
 VOLUME_ON= "res/volume-on.png"
@@ -96,7 +96,15 @@ pygame.mixer.music.play(-1)
 t_volume=True
 t_full= False
 
+
+
+
 while True:
+    # Affichage
+
+    ecran.fill(FOND) 
+    scene.draw(ecran)
+
     ### 1 - Gestion des évènements ###
     
     # Actions utilisateurs (clavier, souris)
@@ -124,18 +132,21 @@ while True:
                 t_full=not t_full
                 pygame.display.toggle_fullscreen(1 if t_full else 0)
 
+        elif event.type == MOUSEMOTION:
+            mouse= pygame.mouse.get_pos()
+            mouse_x = pygame.mouse.get_pos()[0]
+            if mouse_x >= (7/24 * WINDOW_SIZE[0]) and mouse_x <= (149/200 * WINDOW_SIZE[0]) and curseur_carotte.se_dessinner:
+                curseur_nuage.pos=mouse
+                curseur_nuage.se_dessinner = True
+                curseur_carotte.se_dessinner = False
+                
+            elif curseur_nuage.se_dessinner:
+                curseur_nuage.pos=mouse
+                curseur_nuage.se_dessinner = False
+                curseur_carotte.se_dessinner = True
 
     ### 2 - Mise à jour des données ###
     scene.update()
-
-
-    curseur_carotte.pos = mouse
-    curseur_nuage.pos = mouse
-
- 
-    # Affichage 
-    ecran.fill(NOIR) # /?\ Pourquoi ne pas mettre le fond de la même couleur que la couleur unie de background ?
-    ecran.blit(background.img, (0, 0)) # /?\ Idée : mettre le fond à la position en bas de la fenêtre, au centre au lieu d'en haut à gauche
       
     if  event.type == MOUSEBUTTONUP and event.button==1:
         if Bouton_volume_on.get_rect().collidepoint(mouse):
@@ -149,27 +160,12 @@ while True:
 
     ### 2 - Mise à jour des données ###
  
-    # Affichage 
-    ecran.fill(NOIR) # /?\ Pourquoi ne pas mettre le fond de la même couleur que la couleur unie de background ?
-    ecran.blit(background.img, (0, 0)) # /?\ Idée : mettre le fond à la position en bas de la fenêtre, au centre au lieu d'en haut à gauche
     
-    
-    if not t_full:
-        ecran.blit(Bouton_full_on.img, (1/20*WINDOW_SIZE[0],10))
-    else:
-        ecran.blit(Bouton_full_on.img, (1/20*WINDOW_SIZE[0],10))
-
-    if not t_volume:    
-        ecran.blit(Bouton_volume_off.img, (10,10))
-    else:
-        ecran.blit(Bouton_volume_on.img, (10,10))
-
-    mouse = pygame.mouse.get_pos()
 
     ### 3 - Affichage des éléments à l'écran ###
 
     # Si curseur sur la zone de dépôt
-    if mouse[0] >= (7/24 * WINDOW_SIZE[0]) and mouse[0] <= (149/200 * WINDOW_SIZE[0]):
+    '''if mouse[0] >= (7/24 * background.l_x) and mouse[0] <= (149/200 * background.l_x):
         # affichage ligne de dépôt
         pos=(mouse[0], (101/550) * WINDOW_SIZE[1])
         pygame.draw.line(ecran, ROSE, start_pos=pos, end_pos=(mouse[0], WINDOW_SIZE[1]), width=5)
@@ -182,8 +178,7 @@ while True:
     else:
         # affichage curseur carotte (top-left)
         ecran.blit(curseur_carotte.img, mouse)
-
-    scene.draw(ecran)
+'''
 
     ### Mise à jour pygame
     clock.tick(120)

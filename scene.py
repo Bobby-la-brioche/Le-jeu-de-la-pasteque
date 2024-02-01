@@ -9,7 +9,8 @@ class Scene:
 
     def draw(self, ecran: Surface):
         for entity in self.entities:
-            entity.draw(ecran)
+            if entity.se_dessinner:
+                entity.draw(ecran)
 
     def update(self):
         for entity in self.entities:
@@ -29,4 +30,8 @@ class Scene:
 
     def fit_image(self, window_size: tuple[int, int]):
         for entity in self.entities:
-            entity.fit_image(window_size)
+                entity.fit_image(window_size)
+
+
+    def isPresent(self, actor: Entity) -> bool:
+        return actor in self.entities
