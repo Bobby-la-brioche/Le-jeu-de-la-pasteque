@@ -2,6 +2,7 @@
 import pygame, sys
 from pygame.locals import *
 from entity import Entity
+from mouse import Mouse
 from scene import Scene
 from constants import *
 
@@ -29,17 +30,7 @@ def getImageRatio(image: pygame.Surface) -> float:
 
 
 
-APP_TITLE = "Jeu de la pastèque"
-APP_LOGO = "res/logo.png"
 
-WINDOW_SIZE = (1236, 651)
-WINDOW_BACKGROUND = "res/boite.png"
-SOURIS= "res/carotte2.png"
-NUAGE= "res/nuage.png"
-VOLUME_ON= "res/volume-on.png"
-VOLUME_OFF= "res/volume-off.png"
-FULLSCREEN_ON= "res/full-screen-on.png"
-FULLSCREEN_OFF= "res/full-screen-off.png"
 
 # Initialisation de pygame
 pygame.init()
@@ -58,7 +49,7 @@ clock = pygame.time.Clock()
 
 # % par rapport à la largeur de la fenêtre
 
-curseur_carotte_ratio = 0.03
+curseur_ratio = 0.03
 curseur_nuage_ratio = 0.05
 Bouton_volume_on_ratio = 0.03
 Bouton_volume_off_ratio = 0.03
@@ -77,13 +68,12 @@ Bouton_full_off = Entity(WINDOW_SIZE, FULLSCREEN_OFF, Bouton_full_off_ratio)
 
 
 # Souris
-curseur_carotte     = Entity(WINDOW_SIZE, SOURIS, curseur_carotte_ratio)
-curseur_nuage       = Entity(WINDOW_SIZE, NUAGE, curseur_nuage_ratio)
+curseur = Mouse(WINDOW_SIZE, curseur_ratio)
 
 mouse = pygame.mouse.get_pos()
 scene = Scene()
 
-scene.add_entity(background, curseur_carotte, curseur_nuage, Bouton_volume_on, Bouton_volume_off, Bouton_full_on, Bouton_full_off)
+scene.add_entity(background, Bouton_volume_on, Bouton_volume_off, Bouton_full_on, Bouton_full_off, curseur)
 
 
 
@@ -123,40 +113,34 @@ while True:
 
         
         elif  event.type == MOUSEBUTTONUP and event.button==1:
-            if Bouton_volume_on.img.get_rect().collidepoint(pygame.mouse.get_pos()):
+            if Bouton_volume_on.img.get_rect().collidepoint(mouse):
                 t_volume=not t_volume
                 pygame.mixer.music.set_volume(1 if t_volume else 0)
 
         elif  event.type == MOUSEBUTTONUP and event.button==1:
-            if Bouton_full_on.img.get_rect().collidepoint(pygame.mouse.get_pos()):
+            if Bouton_full_on.img.get_rect().collidepoint(mouse):
                 t_full=not t_full
                 pygame.display.toggle_fullscreen(1 if t_full else 0)
 
         elif event.type == MOUSEMOTION:
-            mouse= pygame.mouse.get_pos()
-            mouse_x = pygame.mouse.get_pos()[0]
-            if mouse_x >= (7/24 * WINDOW_SIZE[0]) and mouse_x <= (149/200 * WINDOW_SIZE[0]) and curseur_carotte.se_dessinner:
-                curseur_nuage.pos=mouse
-                curseur_nuage.se_dessinner = True
-                curseur_carotte.se_dessinner = False
-                
-            elif curseur_nuage.se_dessinner:
-                curseur_nuage.pos=mouse
-                curseur_nuage.se_dessinner = False
-                curseur_carotte.se_dessinner = True
+            mouse = pygame.mouse.get_pos()
+            curseur.pos = mouse
+            curseur.updateState(WINDOW_SIZE)
+
+        elif  event.type == MOUSEBUTTONUP and event.button==1:
+            if Bouton_volume_on.get_rect().collidepoint(mouse):
+                t_volume=not t_volume
+                pygame.mixer.music.set_volume(1 if t_volume else 0)
+
+            elif Bouton_full_off.get_rect().collidepoint(mouse):
+                t_full=not t_full
+                pygame.display.toggle_fullscreen(1 if t_full else 0)
+                print("jambon")
 
     ### 2 - Mise à jour des données ###
     scene.update()
       
-    if  event.type == MOUSEBUTTONUP and event.button==1:
-        if Bouton_volume_on.get_rect().collidepoint(mouse):
-            t_volume=not t_volume
-            pygame.mixer.music.set_volume(1 if t_volume else 0)
-
-        elif Bouton_full_off.get_rect().collidepoint(mouse):
-            t_full=not t_full
-            pygame.display.toggle_fullscreen(1 if t_full else 0)
-            print("jambon")
+    
 
     ### 2 - Mise à jour des données ###
  

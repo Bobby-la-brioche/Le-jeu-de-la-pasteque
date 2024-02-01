@@ -8,3 +8,16 @@ NOIR    = (0, 0, 0)
 GRIS    = (155,155,155)
 ROSE    = (180,50, 67)
 FOND    = (200, 200, 120)
+
+
+APP_TITLE = "Jeu de la pastèque"
+APP_LOGO = "res/logo.png"
+
+WINDOW_SIZE = (1236, 651)
+WINDOW_BACKGROUND = "res/boite.png"
+CAROTTE = "res/carotte2.png"
+NUAGE= "res/nuage.png"
+VOLUME_ON= "res/volume-on.png"
+VOLUME_OFF= "res/volume-off.png"
+FULLSCREEN_ON= "res/full-screen-on.png"
+FULLSCREEN_OFF= "res/full-screen-off.png"
