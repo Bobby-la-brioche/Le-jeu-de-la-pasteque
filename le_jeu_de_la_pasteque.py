@@ -124,7 +124,7 @@ while True:
 
         elif event.type == MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
-            curseur.pos = mouse
+            curseur.pos[0] = mouse[0]
             curseur.updateState(WINDOW_SIZE)
 
         elif  event.type == MOUSEBUTTONUP and event.button==1:
