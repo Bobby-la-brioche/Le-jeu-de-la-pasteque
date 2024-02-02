@@ -33,14 +33,14 @@ class Mouse(Entity):
         # on change en nuage        
         if is_in_limits and self.img_index == 0:
             self.img_index = 1
-            self.img = self.imgs[self.img_index]
+            self.image_og = self.imgs[self.img_index]
             self.fit_image(window_size)
 
         # si la souris n'est pas dans les limites et que l'image courante est le nuage
         # on change en carotte
         elif not is_in_limits and self.img_index == 1:
             self.img_index = 0
-            self.img = self.imgs[self.img_index]
+            self.image_og = self.imgs[self.img_index]
             self.fit_image(window_size)
 
         # Remarque : On ne CHANGE PAS l'image courante si elle est déjà la bonne
