@@ -5,11 +5,11 @@ from pygame.locals import SRCALPHA
 
 
 class Entity:
-    def __init__(self, window_size: tuple[int, int], image: str, ratio_taille: float, pos: tuple[int,int]=(0,0),  background_size=False, se_dessinner: bool = True):
+    def __init__(self, window_size: tuple[int, int], image: str, ratio_taille: float, pos: tuple[int,int]=(0,0), background_size=False, se_dessinner: bool = True):
         self.img = load(image).convert_alpha()
         self.image_og = load(image).convert_alpha()
         self.pos = pos
-        self.se_dessinner= se_dessinner
+        self.se_dessinner = se_dessinner
         self.ratio = ratio_taille
         self.background_size = background_size
         self.l_x, self.l_y=self.img.get_size()
@@ -36,6 +36,7 @@ class Entity:
                 newW = int(newH*ratio)
 
             img = Surface((w, h), flags=SRCALPHA)
+            self.pos=((window_size[0]-newW)/2, 0)
             img.blit(self.image_og, (0, 0))
             self.img = transform.scale(img, (newW, newH))
 
