@@ -1,11 +1,11 @@
-from pygame import Surface, transform
+from pygame import Surface, transform, Rect, sprite, draw
 from pygame.image import load
 from image import fitImageScale
 from pygame.locals import SRCALPHA
 
 
-class Entity:
-    def __init__(self, window_size: tuple[int, int], image: str, ratio_taille: float, pos: tuple[int,int]=(0,0), background_size=False, se_dessinner: bool = True):
+class Entity():
+    def __init__(self, window_size: tuple[int, int], image: str, ratio_taille: float, pos: tuple[int,int]=(0,0), background_size=False, se_dessinner: bool = True, hitbox: bool = False):
         self.img = load(image).convert_alpha()
         self.image_og = load(image).convert_alpha()
         self.pos = pos
@@ -14,6 +14,7 @@ class Entity:
         self.background_size = background_size
         self.l_x, self.l_y=self.img.get_size()
         self.rect=self.img.get_rect()
+        self.draw_hitbox= hitbox
 
         self.fit_image(window_size)
 
@@ -44,9 +45,12 @@ class Entity:
         else:
             self.img = fitImageScale(self.image_og, window_size, self.ratio)
 
-
     def update(self):
-        pass
+        self.rect.x = self.pos[0]
+        self.rect.y = self.pos[1]
+
 
     def draw(self, ecran: Surface):
-        ecran.blit(self.img, self.pos)
+        ecran.blit(self.img, self.rect)
+        if self.draw_hitbox:
+            draw.rect(ecran, (255,0,0), Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height),  2)
