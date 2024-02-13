@@ -49,8 +49,7 @@ clock = pygame.time.Clock()
 
 # % par rapport à la largeur de la fenêtre
 
-curseur_ratio = 0.03
-curseur_nuage_ratio = 0.05
+curseur_ratio = 0.045
 Bouton_volume_on_ratio = 0.03
 Bouton_volume_off_ratio = 0.03
 Bouton_full_on_ratio= 0.03
@@ -58,7 +57,7 @@ Bouton_full_off_ratio= 0.03
 
 
 # fond de la fenêtre
-background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain",  hitbox=True)
+background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain",  hitbox=False)
 
 # Boutons
 Bouton_volume_on = Entity(WINDOW_SIZE, VOLUME_ON, Bouton_volume_on_ratio,)
@@ -124,8 +123,11 @@ while True:
 
         elif event.type == MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
-            curseur.pos = (mouse[0], background.pos[1])
             curseur.updateState(WINDOW_SIZE, background.rect)
+            if curseur.img_index==0:
+                curseur.pos = mouse 
+            else:
+                curseur.pos = (mouse[0],background.pos[1]+30)
 
         elif  event.type == MOUSEBUTTONUP and event.button==1:
             if Bouton_volume_on.get_rect().collidepoint(mouse):

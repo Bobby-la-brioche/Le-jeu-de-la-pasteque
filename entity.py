@@ -48,6 +48,8 @@ class Entity():
     def update(self):
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
+        self.rect.h = self.img.get_size()[1]
+        self.rect.w = self.img.get_size()[0]
 
 
     def draw(self, ecran: Surface):

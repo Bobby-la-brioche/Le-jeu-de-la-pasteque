@@ -9,14 +9,14 @@ class Mouse(Entity):
     # puisque Mouse hérite de Entity
     # sauf pour l'image qu'on va définir nous-même à l'intérieur de cette classe
     def __init__(self, window_size: tuple[int, int], ratio_taille: float, pos: tuple[int,int]=(0,0), background_size=False, se_dessinner: bool = True):
-        super().__init__(window_size, CAROTTE, ratio_taille, pos, background_size, se_dessinner, hitbox=True)
+        super().__init__(window_size, CAROTTE, ratio_taille, pos, background_size, se_dessinner)
         
         # ceci est une liste des différentes images de la souris
         self.imgs = [ # tu noteras le s à la fin de img qui n'est pas pareil que self.img qui est l'image courante modifiée par le resize
             self.img, # carotte
             load(NUAGE).convert_alpha() # nuage
         ]
-        self.draw_hitbox=True
+        self.draw_hitbox=False
         self.img_index = 0 # index de l'image courante dans la liste des images
 
         # par défaut, self.img est donc carotte2.png (ligne 10)
