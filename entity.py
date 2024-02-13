@@ -46,6 +46,7 @@ class Entity():
             self.img = fitImageScale(self.image_og, window_size, self.ratio)
 
     def update(self):
+        self.l_x, self.l_y=self.img.get_size()
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
         self.rect.h = self.img.get_size()[1]

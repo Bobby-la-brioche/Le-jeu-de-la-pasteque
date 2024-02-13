@@ -5,6 +5,7 @@ from entity import Entity
 from mouse import Mouse
 from scene import Scene
 from constants import *
+from bouton import Bouton_volume
 
 # /!\ Toute fonction appelée doit être déclarée avant ses appels
 # Généralement on met les fonctions en haut du fichier avant le code principal
@@ -60,11 +61,9 @@ Bouton_full_off_ratio= 0.03
 background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain",  hitbox=False)
 
 # Boutons
-Bouton_volume_on = Entity(WINDOW_SIZE, VOLUME_ON, Bouton_volume_on_ratio,)
-Bouton_volume_off = Entity(WINDOW_SIZE, VOLUME_OFF, Bouton_volume_off_ratio)
 Bouton_full_on = Entity(WINDOW_SIZE, FULLSCREEN_ON, Bouton_full_on_ratio)
 Bouton_full_off = Entity(WINDOW_SIZE, FULLSCREEN_OFF, Bouton_full_off_ratio)
-
+bouton_volume = Bouton_volume(WINDOW_SIZE, Bouton_volume_on_ratio, pos=(40,0))
 
 # Souris
 curseur = Mouse(WINDOW_SIZE, curseur_ratio)
@@ -72,7 +71,7 @@ curseur = Mouse(WINDOW_SIZE, curseur_ratio)
 mouse = pygame.mouse.get_pos()
 scene = Scene()
 
-scene.add_entity(background, Bouton_volume_on, Bouton_volume_off, Bouton_full_on, Bouton_full_off, curseur)
+scene.add_entity(background, bouton_volume, Bouton_full_on, Bouton_full_off, curseur)
 
 
 
@@ -112,55 +111,18 @@ while True:
 
         
         elif  event.type == MOUSEBUTTONUP and event.button==1:
-            if Bouton_volume_on.img.get_rect().collidepoint(mouse):
-                t_volume=not t_volume
-                pygame.mixer.music.set_volume(1 if t_volume else 0)
-
-        elif  event.type == MOUSEBUTTONUP and event.button==1:
-            if Bouton_full_on.img.get_rect().collidepoint(mouse):
-                t_full=not t_full
-                pygame.display.toggle_fullscreen(1 if t_full else 0)
+            if bouton_volume.rect.collidepoint(mouse):
+                bouton_volume.action_volume()             
 
         elif event.type == MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
             curseur.updateState(WINDOW_SIZE, background.rect)
-            if curseur.img_index==0:
-                curseur.pos = mouse 
-            else:
-                curseur.pos = (mouse[0],background.pos[1]+30)
+            curseur.pos = (mouse[0],mouse[1] if curseur.img_index==0 else background.pos[1]+30)
 
-        elif  event.type == MOUSEBUTTONUP and event.button==1:
-            if Bouton_volume_on.get_rect().collidepoint(mouse):
-                t_volume=not t_volume
-                pygame.mixer.music.set_volume(1 if t_volume else 0)
 
 
     ### 2 - Mise à jour des données ###
-    scene.update()
-      
-    
-
-    ### 2 - Mise à jour des données ###
- 
-    
-
-    ### 3 - Affichage des éléments à l'écran ###
-
-    # Si curseur sur la zone de dépôt
-    '''if mouse[0] >= (7/24 * background.l_x) and mouse[0] <= (149/200 * background.l_x):
-        # affichage ligne de dépôt
-        pos=(mouse[0], (101/550) * WINDOW_SIZE[1])
-        pygame.draw.line(ecran, ROSE, start_pos=pos, end_pos=(mouse[0], WINDOW_SIZE[1]), width=5)
-
-        # affichage curseur nuage (centré)
-        pos = (pos[0] - curseur_nuage.img.get_size()[0]/2, pos[1] - curseur_nuage.img.get_size()[1]/2)
-        ecran.blit(curseur_nuage.img, pos)
-    
-    # si curseur en dehors de la zone de dépôt
-    else:
-        # affichage curseur carotte (top-left)
-        ecran.blit(curseur_carotte.img, mouse)
-'''
+    scene.update() 
 
     ### Mise à jour pygame
     clock.tick(120)
