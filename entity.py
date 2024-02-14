@@ -1,4 +1,4 @@
-from pygame import Surface, transform, Rect, sprite, draw
+from pygame import Surface, transform, Rect, draw, mouse
 from pygame.image import load
 from image import fitImageScale
 from pygame.locals import SRCALPHA
@@ -15,6 +15,7 @@ class Entity():
         self.l_x, self.l_y=self.img.get_size()
         self.rect=self.img.get_rect()
         self.draw_hitbox= hitbox
+        self.rayon= False
 
         self.fit_image(window_size)
 
@@ -53,7 +54,10 @@ class Entity():
         self.rect.w = self.img.get_size()[0]
 
 
-    def draw(self, ecran: Surface):
+    def draw(self, ecran: Surface,windowsize):
+        if self.rayon:
+            draw.line(ecran,(200, 200, 200),(self.pos[0]+self.l_x/2, self.pos[1]+self.l_y/2), (self.pos[0]+self.l_x/2,windowsize[1]), 2)
         ecran.blit(self.img, self.rect)
         if self.draw_hitbox:
-            draw.rect(ecran, (255,0,0), Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height),  2)
+            draw.rect(ecran, (255,0,0), Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height),  3)
+        

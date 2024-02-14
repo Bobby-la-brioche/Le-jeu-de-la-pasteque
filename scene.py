@@ -7,10 +7,10 @@ class Scene:
     def __init__(self):
         self.entities: List[Entity] = []
 
-    def draw(self, ecran: Surface):
+    def draw(self, ecran: Surface, windowsize):
         for entity in self.entities:
             if entity.se_dessinner:
-                entity.draw(ecran)
+                entity.draw(ecran, windowsize)
 
     def update(self):
         for entity in self.entities:

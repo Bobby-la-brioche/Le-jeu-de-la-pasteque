@@ -5,7 +5,7 @@ from entity import Entity
 from mouse import Mouse
 from scene import Scene
 from constants import *
-from bouton import Bouton_volume
+from boutons import Bouton_volume, Bouton_screen
 
 # /!\ Toute fonction appelée doit être déclarée avant ses appels
 # Généralement on met les fonctions en haut du fichier avant le code principal
@@ -51,27 +51,23 @@ clock = pygame.time.Clock()
 # % par rapport à la largeur de la fenêtre
 
 curseur_ratio = 0.045
-Bouton_volume_on_ratio = 0.03
-Bouton_volume_off_ratio = 0.03
-Bouton_full_on_ratio= 0.03
-Bouton_full_off_ratio= 0.03
+Bouton_volume_ratio = 0.03
+Bouton_screen_ratio= 0.03
 
 
 # fond de la fenêtre
 background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain",  hitbox=False)
 
 # Boutons
-Bouton_full_on = Entity(WINDOW_SIZE, FULLSCREEN_ON, Bouton_full_on_ratio)
-Bouton_full_off = Entity(WINDOW_SIZE, FULLSCREEN_OFF, Bouton_full_off_ratio)
-bouton_volume = Bouton_volume(WINDOW_SIZE, Bouton_volume_on_ratio, pos=(40,0))
+bouton_screen= Bouton_screen(WINDOW_SIZE, Bouton_screen_ratio)
+bouton_volume = Bouton_volume(WINDOW_SIZE, Bouton_volume_ratio, pos=(40,0))
 
 # Souris
 curseur = Mouse(WINDOW_SIZE, curseur_ratio)
-
 mouse = pygame.mouse.get_pos()
 scene = Scene()
 
-scene.add_entity(background, bouton_volume, Bouton_full_on, Bouton_full_off, curseur)
+scene.add_entity(background, bouton_volume, bouton_screen, curseur)
 
 
 
@@ -91,7 +87,7 @@ while True:
     # Affichage
 
     ecran.fill(FOND) 
-    scene.draw(ecran)
+    scene.draw(ecran, WINDOW_SIZE)
 
     ### 1 - Gestion des évènements ###
     
@@ -109,11 +105,14 @@ while True:
             WINDOW_SIZE = pygame.display.get_surface().get_size()
             scene.fit_image(WINDOW_SIZE)
 
-        
+        # Relever le bouton de la souris
         elif  event.type == MOUSEBUTTONUP and event.button==1:
             if bouton_volume.rect.collidepoint(mouse):
-                bouton_volume.action_volume()             
-
+                bouton_volume.action_volume(WINDOW_SIZE)
+            if bouton_screen.rect.collidepoint(mouse):
+                bouton_screen.action_screen(WINDOW_SIZE)
+                             
+        # Bouger la souris
         elif event.type == MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
             curseur.updateState(WINDOW_SIZE, background.rect)
