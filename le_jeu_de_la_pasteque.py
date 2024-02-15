@@ -6,6 +6,7 @@ from mouse import Mouse
 from scene import Scene
 from constants import *
 from boutons import Bouton_volume, Bouton_screen
+from fruits import Fruit
 
 # /!\ Toute fonction appelée doit être déclarée avant ses appels
 # Généralement on met les fonctions en haut du fichier avant le code principal
@@ -28,9 +29,6 @@ from boutons import Bouton_volume, Bouton_screen
 def getImageRatio(image: pygame.Surface) -> float:
     w, h = image.get_size() # renvoie un tuple (largeur, hauteur) que l'on décompose
     return w / h
-
-
-
 
 
 # Initialisation de pygame
@@ -65,9 +63,16 @@ bouton_volume = Bouton_volume(WINDOW_SIZE, Bouton_volume_ratio, pos=(40,0))
 # Souris
 curseur = Mouse(WINDOW_SIZE, curseur_ratio)
 mouse = pygame.mouse.get_pos()
+
+#Fruits:
+
+orange=Fruit(WINDOW_SIZE, ORANGE, 0.05, ecran, (200,200))
+
+#Scene:
+
 scene = Scene()
 
-scene.add_entity(background, bouton_volume, bouton_screen, curseur)
+scene.add_entity(background, bouton_volume, bouton_screen, orange, curseur)
 
 
 
@@ -76,11 +81,6 @@ file = 'res/music_pasteque.mp3'
 pygame.mixer.init()
 pygame.mixer.music.load(file)
 pygame.mixer.music.play(-1)
-
-t_volume=True
-t_full= False
-
-
 
 
 while True:
@@ -115,10 +115,13 @@ while True:
         # Bouger la souris
         elif event.type == MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
-            curseur.updateState(WINDOW_SIZE, background.rect)
+            curseur.updateState(WINDOW_SIZE, background.rect, orange.hitbox)
             curseur.pos = (mouse[0],mouse[1] if curseur.img_index==0 else background.pos[1]+30)
 
-
+        elif curseur.img_index==1:
+            orange.pos = curseur.pos
+        elif not curseur.img_index==1:
+            orange.pos=(background.rect.w/2, background.pos[1]-orange.rect.h-10)
 
     ### 2 - Mise à jour des données ###
     scene.update() 

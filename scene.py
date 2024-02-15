@@ -32,6 +32,5 @@ class Scene:
         for entity in self.entities:
                 entity.fit_image(window_size)
 
-
     def isPresent(self, actor: Entity) -> bool:
         return actor in self.entities

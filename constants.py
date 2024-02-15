@@ -15,9 +15,19 @@ APP_LOGO = "res/logo.png"
 
 WINDOW_SIZE = (1236, 651)
 WINDOW_BACKGROUND = "res/boite.png"
+
+#Souris
+
 CAROTTE = "res/carotte2.png"
 NUAGE= "res/nuage.png"
+
+#Boutons
+
 VOLUME_ON= "res/volume-on.png"
 VOLUME_OFF= "res/volume-off.png"
 FULLSCREEN_ON= "res/full-screen-on.png"
 FULLSCREEN_OFF= "res/full-screen-off.png"
+
+#Fruits
+
+ORANGE="res/orange.png"

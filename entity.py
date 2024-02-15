@@ -15,8 +15,11 @@ class Entity():
         self.l_x, self.l_y=self.img.get_size()
         self.rect=self.img.get_rect()
         self.draw_hitbox= hitbox
-        self.rayon= False
-
+        self.trait_nuage= False
+        self.fruit = False
+        self.rayon = self.rect.x/2
+        self.centre = (self.pos[0]+self.l_x/2, self.pos[1]+self.l_y/2)
+        
         self.fit_image(window_size)
 
     def fit_image(self, window_size: tuple[int, int]):
@@ -52,12 +55,14 @@ class Entity():
         self.rect.y = self.pos[1]
         self.rect.h = self.img.get_size()[1]
         self.rect.w = self.img.get_size()[0]
-
+        self.rayon = self.rect.width/2
+        self.centre = (self.pos[0]+self.l_x/2, self.pos[1]+self.l_y/2)
 
     def draw(self, ecran: Surface,windowsize):
-        if self.rayon:
+        if self.trait_nuage:
             draw.line(ecran,(200, 200, 200),(self.pos[0]+self.l_x/2, self.pos[1]+self.l_y/2), (self.pos[0]+self.l_x/2,windowsize[1]), 2)
         ecran.blit(self.img, self.rect)
         if self.draw_hitbox:
             draw.rect(ecran, (255,0,0), Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height),  3)
-        
+        if self.fruit:
+            self.hitbox =draw.circle(ecran, (0,0,0), self.centre, self.rayon, 1)

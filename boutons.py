@@ -2,7 +2,6 @@ from entity import Entity
 from constants import VOLUME_OFF, VOLUME_ON, FULLSCREEN_OFF, FULLSCREEN_ON
 from pygame.image import load
 from pygame import mixer, display
-from image import fitImageScale
 '''
 classe bouton:
 doit pouvoir avoir deux images qui alternent.
