@@ -5,10 +5,11 @@ from pygame.locals import SRCALPHA
 
 
 class Entity():
-    def __init__(self, window_size: tuple[int, int], image: str, ratio_taille: float, pos: tuple[int,int]=(0,0), background_size=False, se_dessinner: bool = True, hitbox: bool = False):
+    def __init__(self, window_size: tuple[int, int], image: str, ratio_taille: float, pos: tuple[int,int]=(0,0), background_size=False, se_dessinner: bool = True, hitbox: bool = False, accroche: bool = False):
         self.img = load(image).convert_alpha()
         self.image_og = load(image).convert_alpha()
         self.pos = pos
+        self.x, self.y = pos
         self.se_dessinner = se_dessinner
         self.ratio = ratio_taille
         self.background_size = background_size
@@ -16,10 +17,10 @@ class Entity():
         self.rect=self.img.get_rect()
         self.draw_hitbox= hitbox
         self.trait_nuage= False
-        self.fruit = False
-        self.rayon = self.rect.x/2
+        self.rayon = self.rect.width/2
         self.centre = (self.pos[0]+self.l_x/2, self.pos[1]+self.l_y/2)
-        
+        self.vitesse_y=0
+        self.accroche= accroche
         self.fit_image(window_size)
 
     def fit_image(self, window_size: tuple[int, int]):
@@ -50,6 +51,7 @@ class Entity():
             self.img = fitImageScale(self.image_og, window_size, self.ratio)
 
     def update(self):
+        self.pos =(self.pos[0], self.pos[1]+self.vitesse_y)
         self.l_x, self.l_y=self.img.get_size()
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
@@ -64,5 +66,4 @@ class Entity():
         ecran.blit(self.img, self.rect)
         if self.draw_hitbox:
             draw.rect(ecran, (255,0,0), Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height),  3)
-        if self.fruit:
-            self.hitbox =draw.circle(ecran, (0,0,0), self.centre, self.rayon, 1)
+

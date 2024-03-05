@@ -7,6 +7,7 @@ from scene import Scene
 from constants import *
 from boutons import Bouton_volume, Bouton_screen
 from fruits import Fruit
+from line import Ligne
 
 # /!\ Toute fonction appelée doit être déclarée avant ses appels
 # Généralement on met les fonctions en haut du fichier avant le code principal
@@ -55,6 +56,7 @@ Bouton_screen_ratio= 0.03
 
 # fond de la fenêtre
 background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain",  hitbox=False)
+sol= Ligne((0, WINDOW_SIZE[1]),(WINDOW_SIZE),(0,0,255))
 
 # Boutons
 bouton_screen= Bouton_screen(WINDOW_SIZE, Bouton_screen_ratio)
@@ -72,7 +74,7 @@ orange=Fruit(WINDOW_SIZE, ORANGE, 0.05, ecran, (200,200))
 
 scene = Scene()
 
-scene.add_entity(background, bouton_volume, bouton_screen, orange, curseur)
+scene.add_entity(background, bouton_volume, bouton_screen, curseur, sol, orange)
 
 
 
@@ -104,6 +106,8 @@ while True:
             # Mise à jour de la constante de la taille de la fenêtre
             WINDOW_SIZE = pygame.display.get_surface().get_size()
             scene.fit_image(WINDOW_SIZE)
+            sol.start_point=(0, WINDOW_SIZE[1])
+            sol.end_point= WINDOW_SIZE
 
         # Relever le bouton de la souris
         elif  event.type == MOUSEBUTTONUP and event.button==1:
@@ -111,6 +115,14 @@ while True:
                 bouton_volume.action_volume(WINDOW_SIZE)
             if bouton_screen.rect.collidepoint(mouse):
                 bouton_screen.action_screen(WINDOW_SIZE)
+        
+        #appuyer sur la souris
+        elif event.type == MOUSEBUTTONDOWN and curseur.img_index ==1 and orange.accroche:
+            Fruit.tomber(orange)
+        
+        elif event.type == MOUSEBUTTONDOWN and curseur.img_index ==1 and not orange.accroche:
+            Fruit.statique(orange)
+            Fruit.ramener_souris(orange, (curseur.pos[0], curseur.pos[1]+curseur.rect.height+1))
                              
         # Bouger la souris
         elif event.type == MOUSEMOTION:
@@ -118,11 +130,11 @@ while True:
             curseur.updateState(WINDOW_SIZE, background.rect, orange.hitbox)
             curseur.pos = (mouse[0],mouse[1] if curseur.img_index==0 else background.pos[1]+30)
 
-        elif curseur.img_index==1:
-            orange.pos = curseur.pos
-        elif not curseur.img_index==1:
-            orange.pos=(background.rect.w/2, background.pos[1]-orange.rect.h-10)
-
+            if curseur.img_index==1 and orange.accroche:
+                orange.pos = (curseur.pos[0], curseur.pos[1]+curseur.rect.height+1)
+            elif not curseur.img_index==1 and orange.accroche:
+                orange.pos=(background.rect.w/2, background.pos[1]-orange.rect.h-10)
+    
     ### 2 - Mise à jour des données ###
     scene.update() 
 

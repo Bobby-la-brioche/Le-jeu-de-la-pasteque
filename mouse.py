@@ -31,15 +31,10 @@ class Mouse(Entity):
             self.image_og = self.imgs[self.img_index]
             self.fit_image(window_size)
             self.trait_nuage = not self.trait_nuage
-        if Rect.contains(orange_circ, self.rect) and self.img_index == 0:
-            self.img_index = 1
-            self.image_og = self.imgs[self.img_index]
-            self.fit_image(window_size)
-            self.trait_nuage = not self.trait_nuage
 
         # si la souris n'est pas dans les limites et que l'image courante est le nuage
         # on change en carotte
-        elif not Rect.contains(background_rect, self.rect) and not Rect.contains(orange_circ, self.rect) and self.img_index == 1:
+        elif not Rect.contains(background_rect, self.rect) and self.img_index == 1:
             self.img_index = 0
             self.image_og = self.imgs[self.img_index]
             self.fit_image(window_size)

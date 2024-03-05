@@ -7,7 +7,17 @@ from image import fitImageScale
 class Fruit(Entity):
     def __init__(self, window_size: tuple[int, int], image, ratio_taille: float, ecran, pos: tuple[int, int] = ..., background_size=False, se_dessinner: bool = True, hitbox: bool = False):
         super().__init__(window_size, image, ratio_taille, pos, background_size, se_dessinner, hitbox)
-    
+        self.accroche= True
         self.hitbox= 0
-        self.fruit = True
         self.draw_hitbox= False
+    
+    def tomber(self):
+        self.vitesse_y = 9
+        self.accroche=False
+
+    def statique(self):
+        self.vitesse_y= 0
+        self.accroche= True
+    def ramener_souris(self, pos: tuple [int,int]):
+        self.pos = pos
+        
