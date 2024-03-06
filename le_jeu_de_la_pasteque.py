@@ -83,6 +83,7 @@ file = 'res/music_pasteque.mp3'
 pygame.mixer.init()
 pygame.mixer.music.load(file)
 pygame.mixer.music.play(-1)
+son_eau= pygame.mixer.Sound('res\water_plop.mp3')
 
 
 while True:
@@ -90,7 +91,6 @@ while True:
 
     ecran.fill(FOND) 
     scene.draw(ecran, WINDOW_SIZE)
-    sol.draw(ecran)
 
     ### 1 - Gestion des évènements ###
     
@@ -107,8 +107,6 @@ while True:
             # Mise à jour de la constante de la taille de la fenêtre
             WINDOW_SIZE = pygame.display.get_surface().get_size()
             scene.fit_image(WINDOW_SIZE)
-            sol.start_point=(0, WINDOW_SIZE[1])
-            sol.end_point= WINDOW_SIZE
 
         # Relever le bouton de la souris
         elif  event.type == MOUSEBUTTONUP and event.button==1:
@@ -118,11 +116,14 @@ while True:
                 bouton_screen.action_screen(WINDOW_SIZE)
         
         #appuyer sur la souris
+
         elif event.type == MOUSEBUTTONDOWN and curseur.img_index ==1 and not orange.chute and orange.accroche:
             orange.chute= True
             orange.accroche=False
             orange.vitesse_y=7
-    
+            pygame.mixer.Sound.play(son_eau)
+
+            
                              
         # Bouger la souris
         elif event.type == MOUSEMOTION:
@@ -139,7 +140,6 @@ while True:
         orange.vitesse_y=0
         orange.chute=False
 
-    print(orange.rect.bottom, background.rect.bottom, orange.vitesse_y)
     ### 2 - Mise à jour des données ###
     scene.update() 
 
