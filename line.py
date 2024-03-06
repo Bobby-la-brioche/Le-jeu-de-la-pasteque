@@ -9,9 +9,7 @@ class Ligne():
         self.sol = sol
 
     def draw(self, ecran: Surface):
-        draw.line(ecran, self.color, self.start_point, self.end_point)
+        draw.line(ecran, self.color, self.start_point, self.end_point, 1)
 
     def update(self, WINDOW_SIZE):
-        if self.sol:
-            self.start_point =(0, WINDOW_SIZE[1])
-            self.end_point= WINDOW_SIZE
+        pass

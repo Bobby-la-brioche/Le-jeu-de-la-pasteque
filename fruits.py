@@ -10,14 +10,10 @@ class Fruit(Entity):
         self.accroche= True
         self.hitbox= 0
         self.draw_hitbox= False
-    
-    def tomber(self):
-        self.vitesse_y = 9
-        self.accroche=False
+        self.chute=False
 
     def statique(self):
         self.vitesse_y= 0
         self.accroche= True
-    def ramener_souris(self, pos: tuple [int,int]):
-        self.pos = pos
+
         
