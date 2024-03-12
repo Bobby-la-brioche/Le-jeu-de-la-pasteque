@@ -51,14 +51,7 @@ class Entity():
             self.img = fitImageScale(self.image_og, window_size, self.ratio)
 
     def update(self):
-        self.pos =(self.pos[0], self.pos[1]+self.vitesse_y)
-        self.l_x, self.l_y=self.img.get_size()
-        self.rect.x = self.pos[0]
-        self.rect.y = self.pos[1]
-        self.rect.h = self.img.get_size()[1]
-        self.rect.w = self.img.get_size()[0]
-        self.rayon = self.rect.width/2
-        self.centre = (self.pos[0]+self.l_x/2, self.pos[1]+self.l_y/2)
+        pass
 
     def draw(self, ecran: Surface,windowsize):
         if self.trait_nuage:

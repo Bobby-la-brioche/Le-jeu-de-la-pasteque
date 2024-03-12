@@ -86,8 +86,16 @@ pygame.mixer.music.play(-1)
 son_eau= pygame.mixer.Sound('res\water_plop.mp3')
 
 
+t0 = pygame.time.get_ticks()
+t1 = pygame.time.get_ticks()
+
+viewbox = (0, 0, WINDOW_SIZE[0], WINDOW_SIZE[1])
+
 while True:
     # Affichage
+    t0 = pygame.time.get_ticks()
+
+    deltaTime = (t0 - t1) # temps écoulé entre deux frames en ms
 
     ecran.fill(FOND) 
     scene.draw(ecran, WINDOW_SIZE)
@@ -106,6 +114,7 @@ while True:
         elif event.type == pygame.VIDEORESIZE:
             # Mise à jour de la constante de la taille de la fenêtre
             WINDOW_SIZE = pygame.display.get_surface().get_size()
+            # Mettre à jour viewbox ici !!!
             scene.fit_image(WINDOW_SIZE)
 
         # Relever le bouton de la souris
@@ -143,8 +152,10 @@ while True:
         orange.chute=False
 
     ### 2 - Mise à jour des données ###
-    scene.update() 
+    scene.update(viewbox, deltaTime) 
 
     ### Mise à jour pygame
     clock.tick(120)
     pygame.display.update() 
+
+    t1 = pygame.time.get_ticks()
