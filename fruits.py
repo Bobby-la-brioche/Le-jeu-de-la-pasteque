@@ -9,7 +9,7 @@ class Fruit(Entity):
         super().__init__(window_size, image, ratio_taille, pos, background_size, se_dessinner, hitbox)
         self.accroche= True
         self.hitbox= 0
-        self.draw_hitbox= False
+        self.draw_hitbox= True
         self.chute=False
 
     def statique(self):

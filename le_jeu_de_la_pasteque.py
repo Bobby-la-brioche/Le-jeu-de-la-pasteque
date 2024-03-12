@@ -122,6 +122,8 @@ while True:
             orange.accroche=False
             orange.vitesse_y=7
             pygame.mixer.Sound.play(son_eau)
+            #orange=Fruit(WINDOW_SIZE, ORANGE, 0.05, ecran, (curseur.pos[0], curseur.pos[1]+curseur.rect.height+1))
+            #scene.add_entity(orange)
 
             
                              
