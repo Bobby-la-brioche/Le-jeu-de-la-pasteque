@@ -55,7 +55,7 @@ Bouton_screen_ratio= 0.03
 
 
 # fond de la fenêtre
-background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain",  hitbox=True)
+background = Entity(WINDOW_SIZE, WINDOW_BACKGROUND, 1, (0, 0), "contain",  hitbox=False)
 sol= Ligne((0, WINDOW_SIZE[1]),(WINDOW_SIZE),(0,255,0))
 
 # Boutons
@@ -78,15 +78,26 @@ scene.add_entity(background, bouton_volume, bouton_screen, curseur, orange)
 
 
 
-# Musique
+# Audio
 file = 'res/music_pasteque.mp3'
 pygame.mixer.init()
 pygame.mixer.music.load(file)
 pygame.mixer.music.play(-1)
 son_eau= pygame.mixer.Sound('res\water_plop.mp3')
 
+#temps
+t0 = pygame.time.get_ticks()
+t1 = pygame.time.get_ticks()
+
+viewbox = (0, 0, WINDOW_SIZE[0], WINDOW_SIZE[1])
+
 
 while True:
+    #calcul du temps écoulé
+    t0 = pygame.time.get_ticks()
+
+    deltaTime = (t0 - t1) # temps écoulé entre deux frames en ms
+
     # Affichage
 
     ecran.fill(FOND) 
@@ -107,6 +118,7 @@ while True:
             # Mise à jour de la constante de la taille de la fenêtre
             WINDOW_SIZE = pygame.display.get_surface().get_size()
             scene.fit_image(WINDOW_SIZE)
+            viewbox = (0, 0, WINDOW_SIZE[0], WINDOW_SIZE[1])
 
         # Relever le bouton de la souris
         elif  event.type == MOUSEBUTTONUP and event.button==1:
@@ -118,12 +130,12 @@ while True:
         #appuyer sur la souris
 
         elif event.type == MOUSEBUTTONDOWN and curseur.img_index ==1 and not orange.chute and orange.accroche:
+            pygame.mixer.Sound.play(son_eau)
             orange.chute= True
             orange.accroche=False
             orange.vitesse_y=7
-            pygame.mixer.Sound.play(son_eau)
-            #orange=Fruit(WINDOW_SIZE, ORANGE, 0.05, ecran, (curseur.pos[0], curseur.pos[1]+curseur.rect.height+1))
-            #scene.add_entity(orange)
+            orange=Fruit(WINDOW_SIZE, ORANGE, 0.05, ecran, (curseur.pos[0], curseur.pos[1]+curseur.rect.height+1))
+            scene.add_entity(orange)
 
             
                              
@@ -143,8 +155,9 @@ while True:
         orange.chute=False
 
     ### 2 - Mise à jour des données ###
-    scene.update() 
+    scene.update(viewbox, deltaTime) 
 
     ### Mise à jour pygame
     clock.tick(120)
     pygame.display.update() 
+    t1=pygame.time.get_ticks()

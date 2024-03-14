@@ -19,8 +19,6 @@ class Entity():
         self.trait_nuage= False
         self.rayon = self.rect.width/2
         self.centre = (self.pos[0]+self.l_x/2, self.pos[1]+self.l_y/2)
-        self.vitesse_y=0
-        self.accroche= accroche
         self.fit_image(window_size)
 
     def fit_image(self, window_size: tuple[int, int]):
@@ -51,7 +49,6 @@ class Entity():
             self.img = fitImageScale(self.image_og, window_size, self.ratio)
 
     def update(self):
-        self.pos =(self.pos[0], self.pos[1]+self.vitesse_y)
         self.l_x, self.l_y=self.img.get_size()
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]

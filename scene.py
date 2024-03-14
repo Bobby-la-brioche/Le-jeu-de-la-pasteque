@@ -1,4 +1,5 @@
 from entity import Entity
+from movable import Movable
 from typing import List
 from pygame import Surface
 from line import Ligne
@@ -13,9 +14,12 @@ class Scene:
             if entity.se_dessinner:
                 entity.draw(ecran, windowsize)
 
-    def update(self):
+    def update(self, viewbox: tuple[int, int, int, int], deltaTime):
         for entity in self.entities:
-            entity.update()
+            if isinstance(entity, Movable):
+                entity.update(viewbox, deltaTime)
+            else:
+                entity.update()
 
     def add_entity(self, entity: Entity, *args: Entity):
         self.entities.append(entity)
