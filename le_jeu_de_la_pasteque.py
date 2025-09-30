@@ -161,3 +161,23 @@ while True:
     clock.tick(120)
     pygame.display.update() 
     t1=pygame.time.get_ticks()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #Poulet braisé
